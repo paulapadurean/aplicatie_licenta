@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%=__("title")%></title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+<nav>
+    <div class="logo">BVB Research Hub</div>
+    <ul>
+        <li><a href="/"><%= __("presentation")%></a></li>
+        <li><a href="/rapoarte"><%= __("reports")%></a></li>
+        <li><a href="/comparatii"><%= __("comparisons")%></a></li>
+        <li><a href="/scoruri-esg"><%= __("esg_scores")%></a></li>
+        <li><a href="/contribuitori"><%= __("contributors")%></a></li>
+    </ul>
+
+    <div class="right-menu">
+        <select id="language-select">
+            <option value="ro" <%= locale === 'ro' ? 'selected' : '' %>>Română</option>
+            <option value="en" <%= locale === 'en' ? 'selected' : '' %>>English</option>
+        </select>
+        <button class="subscribe btn" onclick="window.location.href='/subscribe'">
+            <%= __("subscribe")%>
+        </button>
+    </div>
+</nav>
+
+<main>
+    <h1>Contribuitori</h1>
+    <br>
+    <p>Această secțiune este dedicată investitorilor individuali de pe Bursa de Valori București, dar și celor pasionați de piețe de capital și care au cunoștințe și experiență relevantă pe care vor să le împărtășească. De asemenea, această secțiune va constitui un nou canal de comunicare pentru partenerii instituționali ai BVB Research Hub cu comunitatea locală de investitori. <br> Scopul prezentării materialelor și informațiilor este de informare și educație. În același timp, scopul nostru este și de a îmbunătății înțelegerea pieței locale de capital, a strategiilor de investiții și a tehicilor de evaluare. <br> În plus, dorim să promovăm companiile listate la BVB. <br>Pentru a devenii contribuitor, te rugăm să completezi secțiunea "Vreau să devin contribuitor".</p>
+    <br>
+    <br>
+    <button class="button-contribuitor" onclick="window.location.href='/contribuitor_nou'">
+        Vreau să devin contribuitor
+    </button>
+
+</main>
+
+<%- include('footer.html') %>
+<%- include('infobot.html')%>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>InfoBot</title>
+</head>
+
+<body>
+<div id="chat-icon">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg" alt="Chat">
+</div>
+
+
+<div id="chatbox">
+    <div id="text"></div>
+    <div style="display: flex; gap: 10px; align-items: center; margin-top: 10px;">
+        <input id="myPrompt" type="text" placeholder="Scrie întrebarea ta aici..." />
+        <button id="sendBtn">Trimite</button></div>
+
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    const intrebariFrecvente = [
+        {
+            intrebare: /scoruri\s*esg/i,
+            raspuns: `Aceste informații le vei găsi în secțiunea <a href="/scoruri-esg" target="_blank" style="color: #007bff; font-weight: 600;">Scoruri ESG</a>.`
+        },
+        {
+            intrebare: /rapoarte/i,
+            raspuns: `Poți accesa toate rapoartele din <a href="/rapoarte" target="_blank" style="color: #007bff; font-weight: 600;">secțiunea Rapoarte</a>.`
+        },
+        {
+            intrebare: /comparatii|comparații/i,
+            raspuns: `Comparațiile între companii le găsești în <a href="/comparatii" target="_blank" style="color: #007bff; font-weight: 600;">Comparații</a>.`
+        },
+        {
+            intrebare: /contribuitori|autori/i,
+            raspuns: `Lista completă a contributorilor este disponibilă <a href="/contribuitori" target="_blank" style="color: #007bff; font-weight: 600;">aici</a>.`
+        }
+    ];
+
+    document.addEventListener("DOMContentLoaded", function () {
+        $("#chat-icon").click(function () {
+            $("#chatbox").toggle();
+            if ($("#chatbox").is(":visible")) {
+                $("#text").empty();
+                generateAutoMessage();
+            }
+        });
+
+        $("#sendBtn").click(function () {
+            trimite();
+        });
+
+        $("#myPrompt").keypress(function (e) {
+            if (e.which === 13) trimite();
+        });
+    });
+
+    function generateAutoMessage() {
+        $("#text").append(`
+            <div class='chat-message bot welcome-message'>
+                <strong>🤖 Info Bot:</strong> Salut! 👋 Eu sunt Info Bot. Cu ce te pot ajuta astăzi?
+            </div>
+        `);
+        $("#text").scrollTop($("#text")[0].scrollHeight);
+    }
+
+    function trimite() {
+        const textDeTrimis = $("#myPrompt").val().trim();
+        if (!textDeTrimis) return;
+
+        $("#text").append("<div><strong>Tu:</strong> " + textDeTrimis + "</div>");
+
+        const match = intrebariFrecvente.find(q => q.intrebare.test(textDeTrimis));
+
+        if (match) {
+            $("#text").append("<div><strong>Info Bot:</strong> " + match.raspuns + "</div>");
+            $("#myPrompt").val("");
+            $("#text").scrollTop($("#text")[0].scrollHeight);
+        } else {
+            $.ajax({
+                url: "/api/chat",
+                method: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({ prompt: textDeTrimis }),
+                success: function (data) {
+                    $("#text").append("<div><strong>ChatGPT:</strong> " + data.reply + "</div>");
+                    $("#myPrompt").val("");
+                    $("#text").scrollTop($("#text")[0].scrollHeight);
+                },
+                error: function (xhr, status, error) {
+                    $("#text").append("<div style='color:red'><strong>Eroare:</strong> " + error + "</div>");
+                }
+            });
+        }
+    }
+</script>
+
+</body>
+</html>

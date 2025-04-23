@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%=__("description_index")%></title>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+<header>
+    <div class="logo">BVB RESEARCH HUB</div>
+
+    <div class="right-menu">
+        <select id="language">
+            <option value="ro" <%= locale === 'ro' ? 'selected' : '' %>>Română</option>
+            <option value="en" <%= locale === 'en' ? 'selected' : '' %>>English</option>
+        </select>
+        <button class="subscribe btn" onclick="window.location.href='/subscribe'">
+            <%= __("subscribe")%>
+        </button>
+        <button class="menu-btn" id="menu-toggle">☰</button>
+    </div>
+</header>
+
+<div id="dropdown-menu">
+    <a href="/rapoarte"><%= __("reports")%></a>
+    <a href="/comparatii"><%= __("comparisons")%></a>
+    <a href="/scoruri-esg"><%= __("esg_scores")%></a>
+    <a href="/contribuitori"><%= __("contributors")%></a>
+</div>
+
+<section class="hero">
+    <h1>BVB Research Hub</h1>
+    <p><%=__("welcome_message")%></p>
+    <button class="learn-more" id="learn-more"><%=__("learn_more")%></button>
+
+</section>
+
+<section id="description">
+    <h2><%=__("about_us")%></h2>
+    <br>
+
+    <p>
+        <%- __("description_text")%>
+    </p>
+
+</section>
+
+
+
+
+
+<%- include('footer.html') %>
+<%- include('infobot.html')%>
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        document.getElementById("menu-toggle").addEventListener("click", function () {
+            var menu = document.getElementById("dropdown-menu");
+            menu.classList.toggle("show");
+        });
+
+
+        document.getElementById("learn-more").addEventListener("click", function () {
+            var descriptionSection = document.getElementById("description");
+            descriptionSection.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+
+
+        const languageSelector = document.getElementById("language");
+        const urlParams = new URLSearchParams(window.location.search);
+        languageSelector.value = urlParams.get("lang") || localStorage.getItem("selectedLanguage") || "ro";
+
+        languageSelector.addEventListener("change", function () {
+            localStorage.setItem("selectedLanguage", this.value);
+            window.location.href = window.location.pathname + "?lang=" + this.value;
+        });
+
+    });
+</script>
+
+
+
+</body>
+</html>
+
+

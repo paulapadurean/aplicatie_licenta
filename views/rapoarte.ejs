@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%=__("title")%></title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+<nav>
+    <div class="logo">BVB Research Hub</div>
+    <ul>
+        <li><a href="/"><%= __("presentation")%></a></li>
+        <li><a href="/rapoarte"><%= __("reports")%></a></li>
+        <li><a href="/comparatii"><%= __("comparisons")%></a></li>
+        <li><a href="/scoruri-esg"><%= __("esg_scores")%></a></li>
+        <li><a href="/contribuitori"><%= __("contributors")%></a></li>
+    </ul>
+
+    <div class="right-menu">
+        <select id="language-select">
+            <option value="ro" <%= locale === 'ro' ? 'selected' : '' %>>Română</option>
+            <option value="en" <%= locale === 'en' ? 'selected' : '' %>>English</option>
+        </select>
+        <button class="subscribe btn" onclick="window.location.href='/subscribe'">
+            <%= __("subscribe")%>
+        </button>
+    </div>
+</nav>
+
+<main>
+   <h1>Rapoarte de analiză</h1>
+    <br>
+    <button class="button-rapoarte" onclick="toggleFilter()">Căutare</button>
+
+    <div class="filter-wrapper" id="filterBox" style="display: none">
+        <div class="filter-group">
+            <label>Companie</label>
+            <select><option>Selectează</option></select>
+        </div>
+
+        <div class="filter-group">
+            <label>Broker</label>
+            <input type="text" placeholder="Introduceți numele brokerului">
+        </div>
+
+        <div class="filter-row">
+            <div class="filter-group">
+                <label>Dată început</label>
+                <input type="date">
+            </div>
+
+            <div class="filter-group" style="margin-left: 10px">
+                <label>Dată sfârșit</label>
+                <input type="date">
+            </div>
+        </div>
+
+        <div class="filter-group">
+            <label>Tip</label>
+            <select><option>Selectează</option></select>
+        </div>
+
+        <div class="filter-group">
+            <label>Limbă</label>
+            <select><option>Selectează</option></select>
+        </div>
+
+        <div class="buttons">
+            <button onclick="stergeCautare()">🗙 Șterge căutare</button>
+        </div>
+    </div>
+
+    <br>
+    <div class="filter-bar">
+        <label for="filter-select">Filtrează după:</label>
+        <select id="filter-select">
+            <option value="companie">Companie</option>
+            <option value="broker">Broker</option>
+            <option value="data">Data emiterii</option>
+            <option value="program">Program</option>
+            <option value="tip">Tip</option>
+            <option value="limba">Limba</option>
+        </select>
+
+
+    </div>
+
+    <div class="rapoarte">
+        <h2>Rapoarte disponibile</h2>
+
+        <div class="card-row">
+
+        <div class="info-card">
+            <p><strong>Companie:</strong></p>
+            <p><strong>Broker:</strong></p>
+            <p><strong>Data emiterii:</strong></p>
+            <p><strong>Program:</strong></p>
+            <p><strong>Tip:</strong></p>
+            <p><strong>Limba:</strong></p>
+            <p><strong>Acțiuni:</strong><a href="#"><i class="download-icon">⬇️</i></a></p>
+        </div>
+
+        <div class="info-card">
+            <p><strong>Companie:</strong></p>
+            <p><strong>Broker:</strong></p>
+            <p><strong>Data emiterii:</strong></p>
+            <p><strong>Program:</strong></p>
+            <p><strong>Tip:</strong></p>
+            <p><strong>Limba:</strong></p>
+            <p><strong>Acțiuni:</strong><a href="#"><i class="download-icon">⬇️</i></a></p>
+        </div>
+
+        </div>
+    </div>
+    <br>
+    <br>
+
+    <div class="pagination">
+        <a href="#" class="disabled">«</a>
+        <a href="#">‹</a>
+        <a href="#" class="active">1</a>
+        <a href="#">2</a>
+        <a href="#">3</a>
+        <a href="#">4</a>
+        <span>...</span>
+        <a href="#">›</a>
+        <a href="#">»</a>
+    </div>
+
+
+    <script>
+
+        function toggleFilter() {
+            const box = document.getElementById("filterBox");
+            box.style.display = box.style.display === "none" || box.style.display === "" ? "block" : "none";
+        }
+
+        function stergeCautare() {
+            document.querySelectorAll("#filterBox select, #filterBox input").forEach(el => el.value = "");
+            document.getElementById("filterBox").style.display = "none";
+        }
+
+        const itemsPerPage = 8;
+        const items = Array.from({ length: 37 }, (_, i) => `Item ${i + 1}`);
+        let currentPage = 1;
+
+        function displayItems(page) {
+            const container = document.getElementById("item-container");
+            container.innerHTML = "";
+
+            const start = (page - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const pageItems = items.slice(start, end);
+
+            pageItems.forEach(item => {
+                const div = document.createElement("div");
+                div.className = "item";
+                div.textContent = item;
+                container.appendChild(div);
+            });
+        }
+
+        function setupPagination() {
+            const pagination = document.getElementById("pagination");
+            pagination.innerHTML = "";
+            const pageCount = Math.ceil(items.length / itemsPerPage);
+
+            const createLink = (label, page, isDisabled = false, isActive = false) => {
+                const link = document.createElement("a");
+                link.textContent = label;
+                if (isDisabled) link.classList.add("disabled");
+                else link.addEventListener("click", () => changePage(page));
+                if (isActive) link.classList.add("active");
+                pagination.appendChild(link);
+            };
+
+            createLink("«", 1, currentPage === 1);
+            createLink("‹", currentPage - 1, currentPage === 1);
+
+            for (let i = 1; i <= pageCount; i++) {
+                createLink(i, i, false, currentPage === i);
+            }
+
+            createLink("›", currentPage + 1, currentPage === pageCount);
+            createLink("»", pageCount, currentPage === pageCount);
+        }
+
+        function changePage(page) {
+            const pageCount = Math.ceil(items.length / itemsPerPage);
+            if (page < 1 || page > pageCount) return;
+            currentPage = page;
+            displayItems(currentPage);
+            setupPagination();
+        }
+
+        window.onload = function () {
+            displayItems(currentPage);
+            setupPagination();
+            applyFilter();l
+        };
+
+        const filterSelect = document.getElementById("filter-select");
+        const filterInput = document.getElementById("filter-input");
+
+        let currentFilterType = filterSelect?.value || "companie";
+        let currentFilter = "";
+
+        function applyFilter() {
+            const cards = document.querySelectorAll(".info-card");
+            cards.forEach(card => {
+                const fields = {
+                    companie: card.querySelector("p:nth-of-type(1)")?.innerText.toLowerCase(),
+                    broker: card.querySelector("p:nth-of-type(2)")?.innerText.toLowerCase(),
+                    data: card.querySelector("p:nth-of-type(3)")?.innerText.toLowerCase(),
+                    program: card.querySelector("p:nth-of-type(4)")?.innerText.toLowerCase(),
+                    tip: card.querySelector("p:nth-of-type(5)")?.innerText.toLowerCase(),
+                    limba: card.querySelector("p:nth-of-type(6)")?.innerText.toLowerCase()
+                };
+
+                const matches = !currentFilter || fields[currentFilterType]?.includes(currentFilter.toLowerCase());
+                card.style.display = matches ? "block" : "none";
+            });
+        }
+
+        if (filterSelect && filterInput) {
+            filterSelect.addEventListener("change", (e) => {
+                currentFilterType = e.target.value;
+                applyFilter();
+            });
+
+            filterInput.addEventListener("input", (e) => {
+                currentFilter = e.target.value;
+                applyFilter();
+            });
+        }
+
+    </script>
+
+
+
+</main>
+
+<%- include('footer.html') %>
+<%- include('infobot.html')%>
+
+

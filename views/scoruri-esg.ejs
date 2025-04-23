@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%=__("title")%></title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+<nav>
+    <div class="logo">BVB Research Hub</div>
+    <ul>
+        <li><a href="/"><%= __("presentation")%></a></li>
+        <li><a href="/rapoarte"><%= __("reports")%></a></li>
+        <li><a href="/comparatii"><%= __("comparisons")%></a></li>
+        <li><a href="/scoruri-esg"><%= __("esg_scores")%></a></li>
+        <li><a href="/contribuitori"><%= __("contributors")%></a></li>
+    </ul>
+
+    <div class="right-menu">
+        <select id="language-select">
+            <option value="ro" <%= locale === 'ro' ? 'selected' : '' %>>Română</option>
+            <option value="en" <%= locale === 'en' ? 'selected' : '' %>>English</option>
+        </select>
+        <button class="subscribe btn" onclick="window.location.href='/subscribe'">
+            <%= __("subscribe")%>
+        </button>
+    </div>
+</nav>
+
+<main>
+    <h1><%= __("title")%></h1>
+    <br>
+    <p>
+        <%- __("description")%>
+    </p>
+
+    <br>
+
+    <div class="search-box">
+        <input type="text" placeholder="<%=__('search_placeholder')%>">
+        <button><%=__("search_button")%></button>
+    </div>
+</main>
+
+<%- include('footer.html') %>
+<%- include('infobot.html')%>
+
+<script>
+
+    document.getElementById("language-select").addEventListener("change", function(){
+        window.location.search = "?lang=" + this.value;
+    });
+</script>
+
+</body>
+</html>

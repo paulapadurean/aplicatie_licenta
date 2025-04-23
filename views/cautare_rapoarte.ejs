@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Căutare Rapoarte</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 30px;
+            background-color: #f9f9f9;
+        }
+
+        .filter-wrapper {
+            max-width: 600px;
+            margin: auto;
+            background: #fff;
+            padding: 25px;
+            border: 1px solid #ccc;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .filter-title {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .filter-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            font-weight: 600;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        select,
+        input[type="text"],
+        input[type="date"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #bbb;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .filter-row .filter-group {
+            flex: 1;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .buttons button {
+            padding: 10px 20px;
+            border: 1px solid #0066cc;
+            background-color: white;
+            color: #0066cc;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .buttons button:hover {
+            background-color: #e6f1ff;
+        }
+    </style>
+</head>
+<body>
+
+<div class="filter-wrapper">
+    <div class="filter-title">Filtrare Rapoarte</div>
+
+    <div class="filter-group">
+        <label for="companie">Companie</label>
+        <select id="companie">
+            <option>Selectează</option>
+        </select>
+    </div>
+
+    <div class="filter-group">
+        <label for="broker">Broker</label>
+        <input type="text" id="broker" placeholder="Introduceți numele brokerului">
+    </div>
+
+    <div class="filter-row">
+        <div class="filter-group">
+            <label for="start-date">Dată început</label>
+            <input type="date" id="start-date">
+        </div>
+        <div class="filter-group">
+            <label for="end-date">Dată sfârșit</label>
+            <input type="date" id="end-date">
+        </div>
+    </div>
+
+    <div class="filter-group">
+        <label for="tip">Tip</label>
+        <select id="tip">
+            <option>Selectează</option>
+        </select>
+    </div>
+
+    <div class="filter-group">
+        <label for="limba">Limbă</label>
+        <select id="limba">
+            <option>Selectează</option>
+        </select>
+    </div>
+
+    <div class="buttons">
+        <button onclick="resetFiltre()">🗙 Șterge căutarea</button>
+    </div>
+</div>
+
+<script>
+    function resetFiltre() {
+        document.querySelectorAll("select, input[type='text'], input[type='date']").forEach(el => {
+            el.value = "";
+        });
+    }
+</script>
+
+</body>
+</html>
